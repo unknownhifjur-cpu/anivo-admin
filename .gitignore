@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+bower_components/
+
+# Build output
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+coverage/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and runtime data
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+pids/
+*.pid
+*.seed
+
+# Caches
+.cache/
+.eslintcache
+.parcel-cache/
+.turbo/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Package manager and tool files
+.npm/
+.yarn/cache/
+.vite/

@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node --input-type=module -e \"import('vite').then(({ build }) => build())\"",
     "preview": "vite preview"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
