@@ -14,7 +14,10 @@ import {
   X,
 } from "lucide-react";
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL
+  || (import.meta.env.DEV ? "" : "https://anivo-server.onrender.com")
+).replace(/\/$/, "");
 
 const emptyForm = {
   title: "",
