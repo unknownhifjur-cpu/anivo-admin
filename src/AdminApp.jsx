@@ -14,6 +14,8 @@ import {
   X,
 } from "lucide-react";
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const emptyForm = {
   title: "",
   description: "",
@@ -72,7 +74,7 @@ export default function AdminApp() {
     setCatalogLoading(true);
     setCatalogError("");
     try {
-      const response = await fetch("/api/anime/manage", { credentials: "same-origin" });
+      const response = await fetch(`${API_BASE_URL}/api/anime/manage`, { credentials: "include" });
       if (!response.ok) throw new Error(await responseError(response, "Could not load the catalog."));
       const result = await response.json();
       setCatalog(result.anime);
@@ -85,7 +87,7 @@ export default function AdminApp() {
 
   useEffect(() => {
     let active = true;
-    fetch("/api/auth/me", { credentials: "same-origin" })
+    fetch(`${API_BASE_URL}/api/auth/me`, { credentials: "include" })
       .then(async (response) => {
         if (!response.ok) throw new Error(await responseError(response, "Could not check your session."));
         return response.json();
@@ -97,7 +99,7 @@ export default function AdminApp() {
         } else if (result.user?.role === "admin") {
           setAdmin(result.user);
           setCatalogLoading(true);
-          fetch("/api/anime/manage", { credentials: "same-origin" })
+          fetch(`${API_BASE_URL}/api/anime/manage`, { credentials: "include" })
             .then(async (response) => {
               if (!response.ok) throw new Error(await responseError(response, "Could not load the catalog."));
               return response.json();
@@ -172,18 +174,18 @@ export default function AdminApp() {
     setAuthError("");
     setAuthPending(true);
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), password }),
       });
       if (!response.ok) throw new Error(await responseError(response, "Could not sign in."));
       const result = await response.json();
       if (result.user?.role !== "admin") {
-        const logoutResponse = await fetch("/api/auth/logout", {
+        const logoutResponse = await fetch(`${API_BASE_URL}/api/auth/logout`, {
           method: "POST",
-          credentials: "same-origin",
+          credentials: "include",
         });
         if (!logoutResponse.ok) {
           throw new Error(await responseError(logoutResponse, "This portal only accepts the administrator account."));
@@ -208,9 +210,9 @@ export default function AdminApp() {
     setAuthPending(true);
     setAuthError("");
     try {
-      const response = await fetch("/api/auth/logout", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
       });
       if (!response.ok) throw new Error(await responseError(response, "Could not sign out."));
       setAdmin(null);
@@ -240,8 +242,8 @@ export default function AdminApp() {
 
     setUploading(true);
     try {
-      const configResponse = await fetch("/api/uploads/config", {
-        credentials: "same-origin",
+      const configResponse = await fetch(`${API_BASE_URL}/api/uploads/config`, {
+        credentials: "include",
       });
       if (!configResponse.ok) {
         throw new Error(await responseError(configResponse, "Could not load Cloudinary upload settings."));
@@ -293,10 +295,10 @@ export default function AdminApp() {
         status: form.status,
       };
       const response = await fetch(
-        editingId ? `/api/anime/${encodeURIComponent(editingId)}` : "/api/anime",
+        editingId ? `${API_BASE_URL}/api/anime/${encodeURIComponent(editingId)}` : `${API_BASE_URL}/api/anime`,
         {
           method: editingId ? "PUT" : "POST",
-          credentials: "same-origin",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         }
@@ -323,9 +325,9 @@ export default function AdminApp() {
     setDeletingId(item._id);
     setCatalogError("");
     try {
-      const response = await fetch(`/api/anime/${encodeURIComponent(item._id)}`, {
+      const response = await fetch(`${API_BASE_URL}/api/anime/${encodeURIComponent(item._id)}`, {
         method: "DELETE",
-        credentials: "same-origin",
+        credentials: "include",
       });
       if (!response.ok) throw new Error(await responseError(response, "Could not delete this title."));
       setCatalog((current) => current.filter((entry) => entry._id !== item._id));
